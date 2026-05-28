@@ -1,0 +1,149 @@
+@import "tailwindcss";
+
+:root {
+  /* Light Theme Variables */
+  --bg-primary: #f8fafc; /* Slate 50 */
+  --bg-secondary: #f1f5f9; /* Slate 100 */
+  --bg-panel: rgba(255, 255, 255, 0.8);
+  --bg-card: rgba(241, 245, 249, 0.8);
+  --bg-input: #ffffff;
+  
+  --text-primary: #0f172a; /* Slate 900 */
+  --text-secondary: #334155; /* Slate 700 */
+  --text-muted: #64748b; /* Slate 500 */
+  
+  --border-color: rgba(15, 23, 42, 0.15); /* Darkened for much better box visibility */
+  --border-card: rgba(15, 23, 42, 0.12);
+  --shadow-color: rgba(15, 23, 42, 0.08);
+}
+
+.dark {
+  /* Dark Theme Variables */
+  --bg-primary: #0b0f19; /* Deep Space Navy */
+  --bg-secondary: #070a12; /* Even darker space navy */
+  --bg-panel: rgba(17, 24, 39, 0.8);
+  --bg-card: rgba(31, 41, 55, 0.55);
+  --bg-input: #0f172a;
+  
+  --text-primary: #f3f4f6; /* Slate 100 */
+  --text-secondary: #9ca3af; /* Gray 400 */
+  --text-muted: #6b7280; /* Gray 500 */
+  
+  --border-color: rgba(255, 255, 255, 0.08);
+  --border-card: rgba(255, 255, 255, 0.06);
+  --shadow-color: rgba(0, 0, 0, 0.35);
+
+  --accent-primary: #06b6d4; /* cyan-500 — perfect on dark */
+  --accent-secondary: #22d3ee; /* cyan-400 */
+}
+
+/* ── Light-mode readability overrides ── */
+/* cyan-400/500 look washed-out on white; bump them to darker shades */
+:root:not(.dark) .text-cyan-400 { color: #0e7490 !important; }
+:root:not(.dark) .text-cyan-500 { color: #0891b2 !important; }
+:root:not(.dark) .text-cyan-600 { color: #0e7490 !important; }
+:root:not(.dark) .text-purple-400 { color: #7e22ce !important; }
+:root:not(.dark) .text-emerald-400 { color: #059669 !important; }
+:root:not(.dark) .text-amber-400  { color: #d97706 !important; }
+:root:not(.dark) .text-red-400    { color: #dc2626 !important; }
+:root:not(.dark) .text-blue-400   { color: #2563eb !important; }
+
+/* Keep gradient text transparent so the gradient shows through */
+:root:not(.dark) .bg-clip-text { color: transparent !important; }
+
+@layer base {
+  body {
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+    /* Universal premium typography stacking */
+    font-family: 'Poppins', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    transition: background-color 0.25s ease, color 0.25s ease;
+  }
+  
+  h1, h2, h3, h4, h5, h6 {
+    color: var(--text-primary);
+  }
+}
+
+/* Dynamic Glassmorphism styling mapped to theme variables */
+.glass-panel {
+  background: var(--bg-panel);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--border-color);
+  box-shadow: 0 8px 32px var(--shadow-color);
+  transition: background-color 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+}
+
+.glass-card {
+  background: var(--bg-card);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid var(--border-card);
+  box-shadow: 0 2px 12px var(--shadow-color);
+  transition: background-color 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+}
+
+.neon-border-cyan {
+  box-shadow: 0 0 10px rgba(6, 182, 212, 0.12), inset 0 0 5px rgba(6, 182, 212, 0.03);
+  border-color: rgba(6, 182, 212, 0.3);
+}
+
+.neon-border-purple {
+  box-shadow: 0 0 10px rgba(168, 85, 247, 0.12), inset 0 0 5px rgba(168, 85, 247, 0.03);
+  border-color: rgba(168, 85, 247, 0.3);
+}
+
+/* Custom scrollbars based on themes */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg-secondary);
+  transition: background-color 0.25s ease;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--text-muted);
+  opacity: 0.3;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--text-secondary);
+}
+
+/* ── Markdown Content Styling ── */
+.markdown-content h1, 
+.markdown-content h2, 
+.markdown-content h3, 
+.markdown-content h4 {
+  color: var(--text-primary);
+  font-weight: 800;
+  margin-top: 1.5rem;
+  margin-bottom: 1rem;
+}
+.markdown-content h1 { font-size: 2.25rem; }
+.markdown-content h2 { font-size: 1.875rem; }
+.markdown-content h3 { font-size: 1.5rem; }
+.markdown-content strong {
+  font-weight: 700;
+  color: var(--text-primary);
+}
+.markdown-content p {
+  margin-bottom: 1rem;
+}
+.markdown-content ul {
+  list-style-type: disc;
+  padding-left: 1.5rem;
+  margin-bottom: 1rem;
+}
+.markdown-content li {
+  margin-bottom: 0.5rem;
+}
+.markdown-content a {
+  color: var(--accent-primary);
+  text-decoration: underline;
+}

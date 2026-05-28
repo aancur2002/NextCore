@@ -1,0 +1,16 @@
+{
+  "name": "nextcoresystem",
+  "version": "1.0.0",
+  "description": "NextCoreSystem - Managed IT Partner platform",
+  "main": "server/index.js",
+  "scripts": {
+    "install:all": "npm install && npm install --prefix server && npm install --prefix client",
+    "server": "npm start --prefix server",
+    "client": "npm run dev --prefix client",
+    "dev": "concurrently \"npm run server\" \"npm run client\"",
+    "migrate": "node server/db/migrate.js"
+  },
+  "dependencies": {
+    "concurrently": "^8.2.2"
+  }
+}

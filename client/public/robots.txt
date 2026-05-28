@@ -1,0 +1,8 @@
+User-agent: *
+Allow: /
+
+Disallow: /admin/
+Disallow: /customer/
+Disallow: /api/
+
+Sitemap: https://nextcoresystem.com/sitemap.xml
