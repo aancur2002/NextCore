@@ -95,7 +95,7 @@ app.use((err, req, res, next) => {
   res.status(500).json({ error: 'Internal server error occurred.' });
 });
 
-app.listen(PORT, () => {
+app.listen(PORT, '0.0.0.0' ,() => {
   console.log(`=================================================`);
   console.log(` NextCoreSystem Server running on port ${PORT} `);
   console.log(`=================================================`);
