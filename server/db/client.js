@@ -1,50 +1,39 @@
 const { Pool } = require('pg');
-const fs = require('fs');
-const path = require('path');
-require('dotenv').config({ path: path.join(__dirname, '../.env') });
 
-let connectionString = process.env.DATABASE_URL;
+// Read DATABASE_URL from Render environment variables
+const connectionString = process.env.DATABASE_URL;
 
+// Safety check (fail fast if missing)
 if (!connectionString) {
-  // Try reading connection string from pgsql.txt
-  try {
-    const pgsqlPath = path.join(__dirname, '../../pgsql.txt');
-    if (fs.existsSync(pgsqlPath)) {
-      const content = fs.readFileSync(pgsqlPath, 'utf8');
-      // Extract URI matching postgres://...
-      const match = content.match(/postgres:\/\/[^\s]+/);
-      if (match) {
-        connectionString = match[0].trim();
-      }
-    }
-  } catch (err) {
-    console.error('Error reading pgsql.txt:', err);
-  }
-}
-
-// Fallback: throw a clear error if no connection string is found
-if (!connectionString) {
-  console.error('ERROR: DATABASE_URL is not set. Please configure it in server/.env');
+  console.error('❌ ERROR: DATABASE_URL is not set in environment variables');
   process.exit(1);
 }
 
-// CRITICAL FIX: Strip sslmode parameter from the connection string.
-// If it contains ?sslmode=require or &sslmode=require, the pg library overrides 
-// the custom ssl config and fails with a self-signed certificate error.
-if (connectionString) {
-  connectionString = connectionString.replace(/[\?&]sslmode=[^&]+/g, '');
-}
+console.log('🔄 Connecting to PostgreSQL database...');
 
-console.log('Connecting to PostgreSQL database with SSL safety...');
-
+// Create PostgreSQL connection pool
 const pool = new Pool({
-  connectionString: connectionString,
+  connectionString,
   ssl: {
-    rejectUnauthorized: false // Bypasses self-signed certificate error for Aiven
-  }
+    rejectUnauthorized: false, // Required for Aiven / Render SSL
+  },
+  max: 10, // optional: connection pool size
+  idleTimeoutMillis: 30000,
+  connectionTimeoutMillis: 10000,
 });
 
+// Test connection on startup (optional but helpful)
+pool.connect()
+  .then(client => {
+    console.log('✅ PostgreSQL connected successfully');
+    client.release();
+  })
+  .catch(err => {
+    console.error('❌ PostgreSQL connection error:', err.message);
+  });
+
+// Export query helper
 module.exports = {
   query: (text, params) => pool.query(text, params),
-  pool: pool
+  pool,
 };
